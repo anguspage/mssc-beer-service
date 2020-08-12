@@ -24,7 +24,7 @@ public class BrewBeerListener {
     private final JmsTemplate jmsTemplate;
 
     @JmsListener(destination = JmsConfig.BREWING_REQUEST_QUEUE)
-    public void listen(BrewBeerEvent event){
+    public void listen(BrewBeerEvent event) {
         BeerDto beerDto = event.getBeerDto();
 
         Beer beer = beerRepository.getOne(beerDto.getId());
@@ -33,7 +33,7 @@ public class BrewBeerListener {
 
         NewInventoryEvent newInventoryEvent = new NewInventoryEvent(beerDto);
 
-        log.debug("Brewed beer "+ beer.getMinOnHand() + " : QOH : " + beerDto.getQuantityOnHand());
+        log.debug("Brewed beer " + beer.getMinOnHand() + " : QOH : " + beerDto.getQuantityOnHand());
 
         jmsTemplate.convertAndSend(JmsConfig.NEW_INVENTORY_QUEUE, newInventoryEvent);
     }
